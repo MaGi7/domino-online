@@ -54,3 +54,25 @@ socket.on("gameStarted", () => {
   lobby.style.display = "none";
   game.style.display = "block";
 });
+
+const stonesDiv = document.getElementById("stones");
+const predictTitle = document.getElementById("predictTitle");
+const predictButtons = document.getElementById("predictButtons");
+
+socket.on("yourStones", stones => {
+  stonesDiv.innerHTML = "";
+
+  stones.forEach(([a, b]) => {
+    const stone = document.createElement("div");
+    stone.textContent = `${a} : ${b}`;
+    stone.style.border = "1px solid black";
+    stone.style.display = "inline-block";
+    stone.style.padding = "10px";
+    stone.style.margin = "5px";
+    stone.style.fontSize = "18px";
+    stone.style.borderRadius = "6px";
+    stonesDiv.appendChild(stone);
+  });
+
+  showPredictionButtons(stones.length);
+});
