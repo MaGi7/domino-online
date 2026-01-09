@@ -47,7 +47,10 @@ socket.on("playersUpdate", players => {
   }
 });
 
+const lobby = document.getElementById("lobby");
+const game = document.getElementById("game");
+
 socket.on("gameStarted", () => {
-  alert("Game Started!");
-  // Next step: load game UI
+  lobby.style.display = "none";
+  game.style.display = "block";
 });
