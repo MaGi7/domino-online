@@ -76,3 +76,22 @@ socket.on("yourStones", stones => {
 
   showPredictionButtons(stones.length);
 });
+
+function showPredictionButtons(max) {
+  predictTitle.style.display = "block";
+  predictButtons.style.display = "block";
+  predictButtons.innerHTML = "";
+
+  for (let i = 0; i <= max; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i === 0 ? "PASS" : i;
+    btn.style.margin = "5px";
+    btn.onclick = () => makePrediction(i);
+    predictButtons.appendChild(btn);
+  }
+}
+
+function makePrediction(value) {
+  alert("You predicted: " + value);
+  // next step: send to server
+}
