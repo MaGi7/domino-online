@@ -1,31 +1,31 @@
 const socket = io();
 
-// get elements correctly
 const nameInput = document.getElementById("name");
 const roomCodeInput = document.getElementById("roomCode");
 const playersList = document.getElementById("players");
+const startBtn = document.getElementById("startBtn");
+
+let isHost = false;
 
 function createRoom() {
   if (!nameInput.value.trim()) {
-    alert("Please enter your name");
+    alert("Enter your name");
     return;
   }
 
-  socket.emit("createRoom", {
-    name: nameInput.value.trim()
-  });
+  socket.emit("createRoom", { name: nameInput.value.trim() });
+  isHost = true;
 }
 
 function joinRoom() {
-  if (!nameInput.value.trim() || !roomCodeInput.value.trim()) {
-    alert("Enter name and room code");
-    return;
-  }
-
   socket.emit("joinRoom", {
     roomCode: roomCodeInput.value.trim().toUpperCase(),
     name: nameInput.value.trim()
   });
+}
+
+function startGame() {
+  socket.emit("startGame");
 }
 
 socket.on("roomCreated", code => {
@@ -40,6 +40,14 @@ socket.on("playersUpdate", players => {
     li.textContent = `${p.name} (${p.score})`;
     playersList.appendChild(li);
   });
+
+  // Show Start button only to host & if enough players
+  if (isHost && players.length >= 3) {
+    startBtn.style.display = "block";
+  }
 });
 
-socket.on("errorMsg", msg => alert(msg));
+socket.on("gameStarted", () => {
+  alert("Game Started!");
+  // Next step: load game UI
+});
