@@ -1,3 +1,20 @@
+function generateDominoSet() {
+  const stones = [];
+  for (let i = 0; i <= 6; i++) {
+    for (let j = i; j <= 6; j++) {
+      stones.push([i, j]);
+    }
+  }
+  return stones;
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
