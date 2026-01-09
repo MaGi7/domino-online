@@ -118,3 +118,14 @@ socket.on("roundResult", data => {
 
   updateScoreboard(data.players);
 });
+
+const scoresList = document.getElementById("scores");
+
+function updateScoreboard(players) {
+  scoresList.innerHTML = "";
+  players.forEach(p => {
+    const li = document.createElement("li");
+    li.textContent = `${p.name}: ${p.score}`;
+    scoresList.appendChild(li);
+  });
+}
