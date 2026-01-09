@@ -2,16 +2,14 @@ const socket = io();
 
 function createRoom() {
   socket.emit("createRoom", {
-    name: name.value,
-    password: createPass.value
+    name: name.value
   });
 }
 
 function joinRoom() {
   socket.emit("joinRoom", {
     roomCode: roomCode.value.toUpperCase(),
-    name: name.value,
-    password: joinPass.value
+    name: name.value
   });
 }
 
