@@ -22,3 +22,18 @@ ul {
   list-style: none;
   padding: 0;
 }
+
+#scoreboard {
+  position: fixed;
+  right: 10px;
+  top: 80px;
+  width: 160px;
+  border-left: 2px solid #ddd;
+  padding-left: 10px;
+  background: #fafafa;
+}
+
+#scoreboard ul {
+  list-style: none;
+  padding: 0;
+}
