@@ -91,3 +91,36 @@ io.on("connection", socket => {
 server.listen(process.env.PORT || 3000, () =>
   console.log("Server running")
 );
+
+socket.on("makePrediction", (value) => {
+  for (const code in rooms) {
+    const room = rooms[code];
+    const player = room.players.find(p => p.id === socket.id);
+    if (!player) continue;
+
+    // prevent changing prediction
+    if (room.predictions[player.id] !== undefined) return;
+
+    room.predictions[player.id] = value;
+
+    // check if everyone predicted
+    if (Object.keys(room.predictions).length === room.players.length) {
+      // TEMPORARY RESULT LOGIC (round 1 example)
+      room.players.forEach(p => {
+        const predicted = room.predictions[p.id];
+        const won = Math.random() > 0.5; // placeholder
+        p.score += won ? predicted : 0;
+        p.won = won;
+      });
+
+      io.to(code).emit("roundResult", {
+        players: room.players.map(p => ({
+          name: p.name,
+          score: p.score,
+          hand: p.hand,
+          won: p.won
+        }))
+      });
+    }
+  }
+});
