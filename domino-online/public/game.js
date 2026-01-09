@@ -92,6 +92,29 @@ function showPredictionButtons(max) {
 }
 
 function makePrediction(value) {
-  alert("You predicted: " + value);
-  // next step: send to server
+  predictButtons.innerHTML = "<p>Prediction locked</p>";
+  socket.emit("makePrediction", value);
 }
+
+socket.on("roundResult", data => {
+  gameStatus.textContent = "Round finished";
+
+  stonesDiv.innerHTML = "";
+
+  data.players.forEach(p => {
+    const block = document.createElement("div");
+    block.style.border = "1px solid #ccc";
+    block.style.margin = "8px";
+    block.style.padding = "8px";
+
+    block.innerHTML = `
+      <strong>${p.name}</strong><br>
+      Stones: ${p.hand.map(s => s.join(":")).join(", ")}<br>
+      Result: ${p.won ? "WIN" : "LOSE"}
+    `;
+
+    stonesDiv.appendChild(block);
+  });
+
+  updateScoreboard(data.players);
+});
