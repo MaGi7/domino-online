@@ -16,6 +16,17 @@ function generateRoomCode() {
 
 io.on("connection", socket => {
 
+  socket.on("startGame", () => {
+  for (const code in rooms) {
+    const room = rooms[code];
+    const isHost = room.players[0]?.id === socket.id;
+
+    if (isHost && room.players.length >= 3) {
+      io.to(code).emit("gameStarted");
+    }
+  }
+});
+
   socket.on("createRoom", ({ name }) => {
     const roomCode = generateRoomCode();
     rooms[roomCode] = {
