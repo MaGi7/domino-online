@@ -38,9 +38,21 @@ io.on("connection", socket => {
     const room = rooms[code];
     const isHost = room.players[0]?.id === socket.id;
 
-    if (isHost && room.players.length >= 3) {
-      io.to(code).emit("gameStarted");
-    }
+    if (!isHost || room.players.length < 3) return;
+
+    // Round 1 → 1 stone per player
+    const stonesPerPlayer = 1;
+
+    const deck = generateDominoSet();
+    shuffle(deck);
+
+    room.players.forEach(player => {
+      player.hand = deck.splice(0, stonesPerPlayer);
+
+      io.to(player.id).emit("yourStones", player.hand);
+    });
+
+    io.to(code).emit("gameStarted");
   }
 });
 
